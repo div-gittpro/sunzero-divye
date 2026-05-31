@@ -32,8 +32,11 @@ import AdminFleetView from './components/AdminFleetView';
 import AdminAlertsView from './components/AdminAlertsView';
 import AdminAnalyticsView from './components/AdminAnalyticsView';
 import AdminMaintenanceView from './components/AdminMaintenanceView';
+import AuthWorkspace from './components/AuthWorkspace';
 
 export default function App() {
+  const [token, setToken] = useState<string | null>(null);
+  const [userProfile, setUserProfile] = useState<{ email: string; name: string; role: UserRole } | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [isMobileSidebarOpen, setIsMobileSidebarOpen] = useState(false);
   const [userRole, setUserRole] = useState<UserRole>('consumer');
@@ -414,6 +417,18 @@ export default function App() {
     );
   };
 
+  if (!token) {
+    return (
+      <AuthWorkspace
+        onLoginSuccess={(user, authToken) => {
+          setToken(authToken);
+          setUserRole(user.role);
+          setUserProfile(user);
+        }}
+      />
+    );
+  }
+
   return (
     <div id="app-viewport-root" className="min-h-screen bg-[#f8f9ff] text-on-surface">
       {/* Sidebar Drawer Navigation */}
@@ -424,6 +439,10 @@ export default function App() {
         setIsOpen={setIsMobileSidebarOpen}
         userRole={userRole}
         setUserRole={setUserRole}
+        onLogout={() => {
+          setToken(null);
+          setUserProfile(null);
+        }}
       />
 
       {/* Main Top Header Controls */}

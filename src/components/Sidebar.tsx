@@ -11,6 +11,7 @@ import {
   Building2,
   AlertTriangle,
   Grid,
+  LogOut
 } from 'lucide-react';
 import { TabType, UserRole } from '../types';
 
@@ -21,6 +22,7 @@ interface SidebarProps {
   setIsOpen: (open: boolean) => void;
   userRole: UserRole;
   setUserRole: (role: UserRole) => void;
+  onLogout?: () => void;
 }
 
 export default function Sidebar({
@@ -30,6 +32,7 @@ export default function Sidebar({
   setIsOpen,
   userRole,
   setUserRole,
+  onLogout,
 }: SidebarProps) {
   // Generate primary navigation list based on active userRole
   let primaryNavItems = [];
@@ -85,7 +88,7 @@ export default function Sidebar({
       >
         {/* Brand Logo Header */}
         <div id="sidebar-logo-container" className="p-6 flex flex-col items-start gap-1 pb-2">
-          <h1 className="text-3xl font-bold text-primary tracking-tight font-sans">Sunzero</h1>
+          <h1 className="text-3xl font-bold text-primary tracking-tight font-sans font-sans">Sunzero</h1>
           <p className="text-[10px] uppercase tracking-widest text-secondary font-bold">
             Solar Management
           </p>
@@ -155,9 +158,18 @@ export default function Sidebar({
               </button>
             );
           })}
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="w-full flex items-center gap-3 p-3 rounded-lg text-left text-rose-600 hover:text-rose-800 hover:bg-rose-50 transition-all font-bold cursor-pointer"
+            >
+              <LogOut className="w-5 h-5 text-rose-500" />
+              <span className="text-xs tracking-wider uppercase">Log Out</span>
+            </button>
+          )}
         </div>
       </aside>
     </>
   );
 }
-
